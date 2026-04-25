@@ -1,0 +1,257 @@
+Top‑Down Shooter Project – Study Notes Summary
+
+1. Game Architecture
+
+Main structure used in the project:
+
+main.cpp ↓ Game ├ Player ├ BulletManager ├ EnemyManager ├
+ParticleManager └ CollisionSystem
+
+Role of Game class: - Central controller of the game - Manages update
+order of systems - Connects systems together - Simplifies main.cpp -
+Handles game states (Playing / GameOver / Pause)
+
+Typical Update Order: 1. Player Update 2. Bullet Update 3. Enemy Update
+4. Collision System 5. Particle Update 6. Draw
+
+Reason: Collision must use the latest positions after movement updates.
+
+------------------------------------------------------------------------
+
+2. Vector Usage in Game Objects
+
+Example:
+
+std::vector bullets; std::vector enemies;
+
+Meaning: Dynamic array storing active objects in the game.
+
+Important operations: push_back() → add object erase() → remove object
+size() → number of elements
+
+------------------------------------------------------------------------
+
+3. erase() Behavior in std::vector
+
+When an element is erased:
+
+[ A ][ B ][ C ][ D ] ↑ remove
+
+becomes
+
+[ A ][ C ][ D ]
+
+Elements shift left.
+
+Because of this: Index correction is needed.
+
+Example:
+
+bullets.erase(bullets.begin() + x); x–;
+
+Reason: Without x– the next element would be skipped.
+
+------------------------------------------------------------------------
+
+4. Range‑for vs Index Loop
+
+Range-for:
+
+for(auto& enemy : enemies)
+
+Safe when: - Only reading or modifying values
+
+Unsafe when: - Erasing elements from the vector
+
+When erasing elements use:
+
+for(size_t i = 0; i < enemies.size(); ) { if(condition)
+enemies.erase(enemies.begin()+i); else i++; }
+
+------------------------------------------------------------------------
+
+5. Delta Time (dt)
+
+float dt = GetFrameTime();
+
+Meaning: Time elapsed between frames.
+
+Used to make movement frame‑rate independent.
+
+Example:
+
+position += velocity * dt;
+
+Without dt: Game speed changes depending on FPS.
+
+------------------------------------------------------------------------
+
+6. Enemy Movement (Vector Normalization)
+
+dir = playerPos - enemyPos
+
+length = sqrt(dir.x² + dir.y²)
+
+dir /= length
+
+Purpose: Convert direction vector to unit vector.
+
+Final movement:
+
+position += dir * speed * dt
+
+Important safety check:
+
+if(length > 0)
+
+Prevents division by zero.
+
+------------------------------------------------------------------------
+
+7. Collision System
+
+Typical structure:
+
+for bullet for enemy check collision
+
+Collision response: - spawn particle - remove bullet - damage enemy -
+remove enemy if hp <= 0 - increase score
+
+Break is needed because one bullet should only hit one enemy.
+
+------------------------------------------------------------------------
+
+8. Circle Collision Optimization
+
+Instead of:
+
+sqrt(dx² + dy²) < radius
+
+Use:
+
+dx² + dy² < (r1+r2)²
+
+Avoids expensive sqrt operation.
+
+------------------------------------------------------------------------
+
+9. Broad Phase Optimization
+
+Before doing full collision math:
+
+if(abs(dx) > radiusSum) return false if(abs(dy) > radiusSum) return
+false
+
+Then perform full circle check.
+
+This reduces expensive calculations.
+
+------------------------------------------------------------------------
+
+10. Tunneling Problem
+
+When fast objects skip collision between frames.
+
+Example:
+
+Frame1: bullet —- enemy Frame2: enemy —- bullet
+
+Bullet appears to pass through enemy.
+
+Solutions: - Continuous Collision Detection (CCD) - Raycast collision -
+Physics substeps - Limit bullet speed
+
+------------------------------------------------------------------------
+
+11. Random Numbers (rand())
+
+rand() is pseudo‑random.
+
+Without seed:
+
+rand() → same sequence every run
+
+Solution:
+
+srand(time(NULL));
+
+Modern C++ alternative:
+
+library
+
+------------------------------------------------------------------------
+
+12. push_back vs emplace_back
+
+push_back: Creates object first then copies/moves into vector.
+
+emplace_back: Constructs object directly inside vector.
+
+Example:
+
+enemies.emplace_back(pos, type);
+
+Avoids temporary object.
+
+------------------------------------------------------------------------
+
+13. Vector Reallocation Issue
+
+When vector capacity is exceeded:
+
+1.  New memory allocated
+2.  All elements copied
+3.  Old memory deleted
+
+This may cause frame spikes if many objects are created.
+
+Mitigation: vector.reserve(n)
+
+------------------------------------------------------------------------
+
+14. Object Pooling
+
+Instead of constantly creating/destroying objects:
+
+Pre‑allocate objects.
+
+Example:
+
+Particle pool: [ inactive ][ inactive ][ inactive ]
+
+Spawn: Activate unused particle.
+
+Deactivate when lifetime ends.
+
+Benefits: - no allocations - stable performance - common in particles
+and bullets
+
+------------------------------------------------------------------------
+
+15. Spatial Partitioning (Advanced Optimization)
+
+When object counts become large:
+
+bullet × enemy checks become expensive.
+
+Solution: Divide world into regions.
+
+Examples: - Grid - QuadTree - Spatial Hash
+
+Check collisions only within nearby cells.
+
+------------------------------------------------------------------------
+
+16. Manager Pattern
+
+Managers used in this project:
+
+BulletManager EnemyManager ParticleManager
+
+Responsibilities: - store objects - update objects - draw objects
+
+Systems (logic): CollisionSystem Game controller
+
+------------------------------------------------------------------------
+
+End of Summary

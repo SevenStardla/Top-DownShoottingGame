@@ -1,0 +1,303 @@
+Top‑Down Shooter Project Summary (C++ + raylib)
+
+Author: User (Gameplay Programmer Practice Project) Goal: Build a small
+but fully structured shooter game while learning real gameplay
+programming patterns.
+
+------------------------------------------------------------------------
+
+1. Core Goal of the Project
+
+This project was designed to practice:
+
+-   Gameplay programming
+-   Game architecture
+-   Object management
+-   Collision systems
+-   Real‑time game loops
+
+Technology used:
+
+-   Language: C++
+-   Graphics Library: raylib
+-   Compiler: g++ (MinGW)
+-   Editor: VSCode
+
+------------------------------------------------------------------------
+
+2. Final Game Features
+
+The completed game contains the following systems:
+
+Player Controller Bullet System Enemy AI Enemy Types Enemy Spawn System
+Collision System Particle Effects Screen Shake Damage System HP System
+Score System Wave System Difficulty Scaling Game Over State Restart
+System
+
+This represents a complete mini‑game architecture.
+
+------------------------------------------------------------------------
+
+3. Final Project Structure
+
+Recommended project layout:
+
+ShooterGame/
+
+build/ include/ src/ assets/ .vscode/
+
+------------------------------------------------------------------------
+
+Include Folder (Headers)
+
+include/
+
+game/ Game.h
+
+player/ Player.h
+
+enemy/ Enemy.h EnemyManager.h
+
+bullet/ Bullet.h BulletManager.h
+
+particle/ Particle.h ParticleManager.h
+
+system/ CollisionSystem.h
+
+------------------------------------------------------------------------
+
+Source Folder (Implementation)
+
+src/
+
+main.cpp
+
+game/ Game.cpp
+
+player/ Player.cpp
+
+enemy/ Enemy.cpp EnemyManager.cpp
+
+bullet/ Bullet.cpp BulletManager.cpp
+
+particle/ Particle.cpp ParticleManager.cpp
+
+system/ CollisionSystem.cpp
+
+------------------------------------------------------------------------
+
+4. Game Architecture
+
+Game ├ Player ├ BulletManager ├ EnemyManager │ ├ Wave System │ └ Spawn
+System ├ ParticleManager └ CollisionSystem
+
+main.cpp only starts the game loop.
+
+Game.cpp controls:
+
+Update() Draw() Reset() TriggerShake()
+
+------------------------------------------------------------------------
+
+5. Player System
+
+Player contains:
+
+position speed radius hp damage cooldown invincibility state
+
+Movement uses WASD.
+
+Damage system:
+
+TakeDamage(amount)
+
+-   decreases HP
+-   activates invincibility
+-   starts cooldown
+
+This prevents continuous damage every frame.
+
+------------------------------------------------------------------------
+
+6. Bullet System
+
+Bullet properties:
+
+position velocity radius
+
+BulletManager stores:
+
+vector
+
+Responsibilities:
+
+Shoot() Update() Draw()
+
+Bullets are removed when:
+
+-   leaving screen
+-   hitting enemies
+
+------------------------------------------------------------------------
+
+7. Enemy System
+
+Enemy properties:
+
+type speed radius hp position
+
+Enemy Types:
+
+Normal Fast Tank
+
+EnemyManager responsibilities:
+
+spawn enemies update enemies control waves control difficulty
+
+Enemies spawn outside screen edges.
+
+------------------------------------------------------------------------
+
+8. Collision System
+
+CollisionSystem handles:
+
+Bullet vs Enemy Enemy vs Player
+
+Collision uses circle distance checks.
+
+Bullet vs Enemy:
+
+bullet removed enemy HP reduced particle effect created score increased
+
+Enemy vs Player:
+
+calls Player.TakeDamage()
+
+------------------------------------------------------------------------
+
+9. Particle System
+
+Particle structure:
+
+position velocity life
+
+ParticleManager:
+
+Spawn() Update() Draw()
+
+Used for enemy death effects.
+
+------------------------------------------------------------------------
+
+10. Screen Shake System
+
+Camera2D used for screen shake.
+
+Variables:
+
+shakeTimer shakeDuration shakePower
+
+TriggerShake() activates shaking.
+
+------------------------------------------------------------------------
+
+11. HP System
+
+Player HP:
+
+maxHp hp
+
+Displayed with:
+
+text HP bar
+
+HP reaching 0 triggers Game Over.
+
+------------------------------------------------------------------------
+
+12. Score System
+
+Score increases when enemies die.
+
+Displayed on screen.
+
+------------------------------------------------------------------------
+
+13. Difficulty Scaling
+
+Enemy spawn rate increases over time.
+
+spawnInterval gradually decreases.
+
+------------------------------------------------------------------------
+
+14. Wave System
+
+Wave system increases enemy count.
+
+Example:
+
+Wave 1 → 5 enemies Wave 2 → 10 enemies Wave 3 → 15 enemies
+
+Wave number displayed in UI.
+
+------------------------------------------------------------------------
+
+15. Game State System
+
+Game states:
+
+Playing Game Over
+
+Press R to reset the game.
+
+------------------------------------------------------------------------
+
+16. Programming Concepts Learned
+
+vector usage erase patterns size_t vs int game loop structure manager
+pattern system separation delta time usage state handling
+
+------------------------------------------------------------------------
+
+17. Key Design Patterns
+
+Manager Pattern
+
+BulletManager EnemyManager ParticleManager
+
+System Pattern
+
+CollisionSystem
+
+Game Controller
+
+Game class manages the whole game.
+
+------------------------------------------------------------------------
+
+18. Common Problems Encountered
+
+Signed vs unsigned warnings Vector erase iteration issues Header include
+path errors Continuous collision damage
+
+Solutions:
+
+size_t loops damage cooldown proper include paths safe erase loops
+
+------------------------------------------------------------------------
+
+19. Possible Future Improvements
+
+Object Pooling Weapon System Enemy Wave AI Upgrade System Sound System
+UI System Item drops
+
+------------------------------------------------------------------------
+
+20. Final Result
+
+This project represents:
+
+A structured gameplay programming practice project A complete mini
+shooter game A solid learning portfolio piece

@@ -1,0 +1,87 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Game",
+            "type": "shell",
+            "command": "C:/msys64/mingw64/bin/g++.exe",
+            "args": [
+                "-std=c++17",
+                "-Wall",
+
+                "src/main.cpp",
+                "src/game/Game.cpp",
+                "src/player/Player.cpp",
+                "src/enemy/Enemy.cpp",
+                "src/enemy/EnemyManager.cpp",
+                "src/bullet/Bullet.cpp",
+                "src/bullet/BulletManager.cpp",
+                "src/particle/Particle.cpp",
+                "src/particle/ParticleManager.cpp",
+                "src/system/CollisionSystem.cpp",
+                "src/system/WeaponSystem.cpp",
+
+                "-Isrc",
+                "-Iinclude",
+
+                "-IC:/raylib-5.5_win64_mingw-w64/include",
+                "-LC:/raylib-5.5_win64_mingw-w64/lib",
+
+                "-lraylib",
+                "-lopengl32",
+                "-lgdi32",
+                "-lwinmm",
+
+                "-o",
+                "build/game.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
+
+// {
+//   "version": "2.0.0",
+//   "tasks": [
+//     {
+//       "label": "Build raylib",
+//       "type": "shell",
+//       "command": "C:/msys64/mingw64/bin/g++.exe",
+//       "args": [
+//         "src/main.cpp",
+//         "src/player/Player.cpp",
+//         "src/bullet/Bullet.cpp",
+//         "src/bullet/BulletManager.cpp",
+//         "src/enemy/Enemy.cpp",
+//         "src/enemy/EnemyManager.cpp",
+//         "src/system/CollisionSystem.cpp",
+//         "src/particle/Particle.cpp",
+//         "src/particle/ParticleManager.cpp",
+//         "src/game/Game.cpp",
+
+//         "-Iinclude",
+//         "-Isrc",
+
+//         "-IC:/raylib-5.5_win64_mingw-w64/include",
+//         "-LC:/raylib-5.5_win64_mingw-w64/lib",
+//         "-lraylib",
+//         "-lopengl32",
+//         "-lgdi32",
+//         "-lwinmm",
+//         "-o",
+//         "build/game.exe"
+//       ],
+//       "group": {
+//         "kind": "build",
+//         "isDefault": true
+//       },
+//       "problemMatcher": ["$gcc"]
+//     }
+//   ]
+// }
