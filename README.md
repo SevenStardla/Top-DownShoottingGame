@@ -9,5 +9,5 @@ Features
 - Debug key System
 
 Tech
--C++
--raylib
+- C++
+- raylib
