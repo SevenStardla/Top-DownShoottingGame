@@ -5,11 +5,13 @@ const int SCREEN_HEIGHT = 600;
 
 EnemyManager::EnemyManager()
     {
-        wave = 1;
-        enemiesToSpawn = 5;
-
-        waveTimer = 0;
-        waveInterval = 10.0f;
+        wave = 1; // 현재 진행중인 웨이브(게임 단계)
+        enemiesToSpawn = 5; // 현재 웨이브에서 생성해야 할 적의 총 수
+        waveTimer = 0; // 웨이브 진행 시간 측정용 타이머
+        waveInterval = 10.0f; // 다음 단계가 시작되기까지 기다리는 시간
+        spawnTimer = 0; // 마지막 적 생성 이후 경과 시간
+        spawnInterval = 2.0f; // 다음 적이 생성되기까지의 시간 간격
+        difficultyTimer = 10.0f; // 시간이 지남에 따라 난이도를 증가시키기 위한 타이머
     }
 
 void EnemyManager::SetSpeedMultiplier(float multiplier)
